@@ -1,27 +1,49 @@
 package br.com.igti.ciclodevida
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 
-class MainActivity : AppCompatActivity() {
+class ResultadoActivity : AppCompatActivity() {
+    private lateinit var button: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_resultado)
+        button =  findViewById(R.id.btnResultado)
+        if (savedInstanceState !=null){
+            if (savedInstanceState.getBoolean(TAG_VIEW)){
+                button.visibility = View.VISIBLE
+            }
+        }
         Log.i(TAG, "$ACTIVITY onCreate")
         configurarListeners()
     }
 
-    private fun configurarListeners(){
-        configurarListenersBtnNovaTela()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(TAG_VIEW, button.visibility == View.VISIBLE)
     }
 
-    private fun configurarListenersBtnNovaTela() {
-        val button = findViewById<Button>(R.id.btnMAinAcao)
-        button.setOnClickListener {
-            startActivity( Intent (this, ResultadoActivity::class.java))
+    private fun configurarListeners(){
+        acaoBotaoVoltar()
+        acaoBotaoNovo()
+
+    }
+
+    private fun acaoBotaoNovo() {
+        findViewById<Button>(R.id.btnNovo).setOnClickListener{
+            button.visibility = View.VISIBLE
+        }
+    }
+
+
+
+    private fun acaoBotaoVoltar() {
+             button.setOnClickListener{
+            finish()
         }
     }
 
@@ -57,6 +79,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "LogI"
-        private const val ACTIVITY = "MainActivity::"
+        private const val ACTIVITY = "ResultadoActivity::"
+        private val TAG_VIEW = "btn_visibility"
     }
 }
